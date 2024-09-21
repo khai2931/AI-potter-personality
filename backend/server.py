@@ -31,15 +31,9 @@ print(f'Listening on port {SERVER_PORT} ...') # if all goes well, we will print 
 
 while True: # so that we continuously keep listening to new client connections
     
-    # try:
-    print('ran') # <----- add print statement to explain the blocking
     client_socket, client_address = server_socket.accept()
-    print('ran2')  # <----- add print statement to explain the blocking
-    # except BlockingIOError:
-    #     time.sleep(1)
-    #     continue
     request = client_socket.recv(1500).decode() # decode converts binary to string
-    print(request)
+    # print(request)
 
     # This request is composed of a request line, headers, and 
     # an optional message body.

@@ -17,6 +17,8 @@ def get_question_and_answers(prev_question: str, context: str = None) -> (str, l
     answers.append(get_answer(question))
   return question, answers
 
-question, answers = get_question_and_answers("What do you like to do in your free time?")
-print(question)
-print(answers)
+print("DEBUG: questions_answers.py initialized")
+
+# question, answers = get_question_and_answers("What do you like to do in your free time?")
+# print(question)
+# print(answers)
