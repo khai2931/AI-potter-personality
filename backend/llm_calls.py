@@ -1,7 +1,7 @@
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 # download the model first into the directory MODEL_PATH
-# change just this variable
+# (e.g. into "models/google/flan-t5-small" for "google/flan-t5-small")
 MODEL_NAME = "google/flan-t5-small"
 MODEL_PATH = "./models/" + MODEL_NAME
 
@@ -22,5 +22,5 @@ questions = [
   "Imagine that you are mean and disloyal. How would you treat your friends that betrayed you?"
 ]
 
-# for question in questions:
-#   print(get_llm_response(question))
+for question in questions:
+  print(get_llm_response(question))
