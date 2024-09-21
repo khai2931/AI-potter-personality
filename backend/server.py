@@ -1,10 +1,19 @@
 import socket
 # import time
 from questions_answers import get_question_and_answers
+import json
 
 # Define the host and port
 SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 8080
+
+# helper for string formatting
+def get_nice_qs_as(prev_question: str, context: str = None) -> str:
+    question, answers = get_question_and_answers(prev_question, context)
+    content = question + "\n"
+    for answer in answers:
+        content += answer + "\n"
+    return content
 
 # ---------- CREATE SOCKET ----------
 
@@ -42,30 +51,31 @@ while True: # so that we continuously keep listening to new client connections
     http_method = first_header_components[0]
     path = first_header_components[1]
 
+    # default case
+    response = 'HTTP/1.1 405 Method Not Allowed\n\nAllow: GET'
+
     if http_method == 'GET':
-        # if path == '/':
-        #     fin = open('index.html')
-        # elif path == '/book':
-        #     fin = open('book.json')
-        # elif path == '/favicon.ico':
-        #     fin = open('index.html')
-        # else:
-        #     # handle the edge case
-        #     pass
-        
-        # content = fin.read()
-        # fin.close()
         if path == '/qs-as':
-            question, answers = get_question_and_answers("What do you like to do in your free time?")
-            content = question + "\n"
-            for answer in answers:
-                content += answer + "\n"
+            content = get_nice_qs_as("What do you like to do in your free time?")
         else:
             content = "INVALID PATH"
 
         response = 'HTTP/1.1 200 OK\n\n' + content
-    else:
-        response = 'HTTP/1.1 405 Method Not Allowed\n\nAllow: GET'
+    elif http_method == 'POST':
+        if path == '/qs-as':
+            body_json = request.split("\r\n\r\n")[1]
+            content = "DEBUG: THE DATA WAS RECEIVED:\n" + body_json
+
+            json_obj = json.loads(body_json)
+
+            # print("question: " + json_obj["question"])
+            # print("context: " + json_obj["context"])
+            content = get_nice_qs_as(json_obj["question"], json_obj["context"])
+        else:
+            content = "INVALID PATH"
+
+
+        response = 'HTTP/1.1 200 OK\n\n' + content
 
     client_socket.sendall(response.encode()) # encode converts string to bytes
 
