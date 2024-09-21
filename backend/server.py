@@ -58,7 +58,7 @@ while True: # so that we continuously keep listening to new client connections
     elif http_method == 'POST':
         if path == '/qs-as':
             body_json = request.split("\r\n\r\n")[1]
-            content = "DEBUG: THE DATA WAS RECEIVED:\n" + body_json
+            # content = "DEBUG: THE DATA WAS RECEIVED:\n" + body_json
 
             json_obj = json.loads(body_json)
 
