@@ -1,9 +1,10 @@
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 # download the model first into the directory MODEL_PATH
+# MUST RUN FROM the backend directory (not root)
 # (e.g. into "models/google/flan-t5-small" for "google/flan-t5-small")
 MODEL_NAME = "google/flan-t5-small"
-MODEL_PATH = "./models/" + MODEL_NAME
+MODEL_PATH = "../models/" + MODEL_NAME
 
 tokenizer = T5Tokenizer.from_pretrained(MODEL_PATH)
 model = T5ForConditionalGeneration.from_pretrained(MODEL_PATH)
