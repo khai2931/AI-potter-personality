@@ -1,18 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
+import QuestionsAnswers from './QuestionsAnswers.js'
 
 function App() {
-  let testString = "hello world";
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          {testString}
-        </p>
+        <QuestionsAnswers />
         <a
           className="App-link"
           href="https://reactjs.org"

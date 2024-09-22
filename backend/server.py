@@ -47,14 +47,11 @@ while True: # so that we continuously keep listening to new client connections
 
     # default case
     response = 'HTTP/1.1 405 Method Not Allowed\n\nAllow: GET'
+    content = "INVALID PATH"
 
     if http_method == 'GET':
         if path == '/qs-as':
             content = get_nice_qs_as("What do you like to do in your free time?")
-        else:
-            content = "INVALID PATH"
-
-        response = 'HTTP/1.1 200 OK\n\n' + content
     elif http_method == 'POST':
         if path == '/qs-as':
             body_json = request.split("\r\n\r\n")[1]
@@ -65,11 +62,17 @@ while True: # so that we continuously keep listening to new client connections
             # print("question: " + json_obj["question"])
             # print("context: " + json_obj["context"])
             content = get_nice_qs_as(json_obj["question"], json_obj["context"])
-        else:
-            content = "INVALID PATH"
 
 
-        response = 'HTTP/1.1 200 OK\n\n' + content
+    response =  'HTTP/1.1 200 OK\r\n'
+    response += 'Access-Control-Allow-Origin: http://localhost:3000\r\n'
+    # response += 'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept\n'
+
+    response += '\r\n' + content
+
+    # DEBUG
+    print("DEBUG: response")
+    print(response)
 
     client_socket.sendall(response.encode()) # encode converts string to bytes
 
