@@ -1,7 +1,6 @@
 // makes an HTTP GET request to the url provided
 // sends the response to the callback function
 // that must accept a string param
-import { EMPTY_SELECTION } from "./const";
 
 export function getRequest(url, callback) {
   var http = new XMLHttpRequest();
@@ -10,7 +9,7 @@ export function getRequest(url, callback) {
       // debug
       console.log("DEBUG getRequest()");
       console.log(http.responseText);
-      callback(http.responseText, EMPTY_SELECTION);
+      callback(http.responseText, undefined);
     }
   }
   http.open("GET", url, true);
