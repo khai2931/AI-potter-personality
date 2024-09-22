@@ -41,7 +41,7 @@ class QuestionsAnswers extends React.Component {
           <input id="ans5" style={this.backgroundColor(5)} className="answer" onClick={() => this.selectAnswer(5)} type="text" placeholder="Type your own answer..."/>
         </div>
         <button>Next</button>
-        <p className="q-num">Question {this.state.qNum} of 7</p>
+        <p className="q-num">Question {this.state.questionNum} of 7</p>
       </div>
     );
   }
