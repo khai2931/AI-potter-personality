@@ -1,19 +1,24 @@
 import React from 'react';
 
+var INITIALIZED = false;
+
 class QuestionsAnswers extends React.Component {
   constructor() {
     super();
     this.state = {
-      question: "Loading next question...",
+      question: "Quiz is now loading...",
       answer1: "...",
       answer2: "...",
       answer3: "...",
       answer4: "..."
     }
     this.updateState = this.updateState.bind(this);
-    this.getNextQuestionAnswers(this.updateState);
   }
   render() {
+    if (!INITIALIZED) {
+      INITIALIZED = true;
+      this.getNextQuestionAnswers(this.updateState);
+    }
     return (
       <div>
         <h3>{this.state.question}</h3>

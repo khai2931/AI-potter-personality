@@ -35,10 +35,16 @@ while True: # so that we continuously keep listening to new client connections
     request = client_socket.recv(1500).decode() # decode converts binary to string
     # print(request)
 
+    if request.strip() == "":
+        client_socket.close()
+        continue
+
     # This request is composed of a request line, headers, and 
     # an optional message body.
 
     # Returns HTTP response
+    print("DEBUG: request")
+    print(request)
     headers = request.split('\n')
     first_header_components = headers[0].split()
 
