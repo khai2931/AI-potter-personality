@@ -25,7 +25,9 @@ Credits to Charles Niu for the idea!
 
 ## Speeding things up and customizing the LLM
 If you would like to avoid re-downloading entire models and save time running the server,
-1. Go to `backend/llm_calls.py`
+
+0. Go to `backend/llm_calls.py
+1. Set `SAVE_MODEL=True` to save your downloaded model, running with `USE_OFFLINE = False`
 2. Set `USE_OFFLINE = True`
 3. Change `MODEL_NAME` to the name of the model you'd like; this will determine the directory of the model
 4. Manually download the model in a root level folder for `models`
