@@ -3,15 +3,20 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 # if set true, uses an offline model downloaded in ../models/
 # otherwise, downloads the model from huggingface
-USE_OFFLINE = True
+USE_OFFLINE = False
+
+# set true if this is a T5 model
 IS_T5 = True
-SAVE_MODEL = False
+
+# saves model only if set true
+SAVE_MODEL = True
 
 # if using offline, download the model first into the directory MODEL_PATH
 # MUST RUN FROM the backend directory (not root)
 # (e.g. into "models/google/flan-t5-small" for "google/flan-t5-small")
 
-MODEL_NAME = "google/flan-t5-small"
+# MODEL_NAME = "google/flan-t5-small"
+MODEL_NAME = "google/flan-t5-base"
 # MODEL_NAME = "Babelscape/rebel-large"
 MODEL_PATH = "../models/" + MODEL_NAME
 
