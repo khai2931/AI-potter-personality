@@ -7,8 +7,8 @@ export function getRequest(url, callback) {
   http.onreadystatechange = function() {
     if (http.readyState === XMLHttpRequest.DONE) {
       // debug
-      console.log("DEBUG getRequest()");
-      console.log(http.responseText);
+      // console.log("DEBUG getRequest()");
+      // console.log(http.responseText);
       callback(http.responseText, undefined, undefined);
     }
   }
@@ -17,8 +17,8 @@ export function getRequest(url, callback) {
 }
 
 export function postRequest(url, callback, body, ansNum, newQuestionNum) {
-  console.log("DEBUG: postRequest() body");
-  console.log(body);
+  // console.log("DEBUG: postRequest() body");
+  // console.log(body);
   var http = new XMLHttpRequest();
   http.onreadystatechange = function() {
     if (http.readyState === XMLHttpRequest.DONE) {
@@ -35,5 +35,6 @@ export function postRequest(url, callback, body, ansNum, newQuestionNum) {
       console.log(`Error: ${http.status}`);
     }
   };
+  // console.log("DEBUG: Body sent: \n" + body)
   http.send(body);
 }

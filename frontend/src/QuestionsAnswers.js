@@ -5,6 +5,8 @@ const NOT_SELECTED_COLOR = { backgroundColor: "#e5e7eb" };
 const SELECTED_COLOR = { backgroundColor: "#4ade80" };
 const MAX_QUESTIONS = 5
 
+var determinedHouse = false; 
+
 class QuestionsAnswers extends React.Component {
   constructor() {
     super();
@@ -16,16 +18,27 @@ class QuestionsAnswers extends React.Component {
       answer4: "Gossip and find all the secrets about everyone",
       chosen: 0,
       questionNum: 1,
-      selected: [false, false, false, false, false]
+      selected: [false, false, false, false, false],
+      house: "",
+      overallContext: ""
     }
     this.updateState = this.updateState.bind(this);
+    this.updateHouse = this.updateHouse.bind(this);
+    this.updateContext = this.updateContext.bind(this);
   }
   render() {
     if (this.state.questionNum > MAX_QUESTIONS) {
+      // trim off trailing ", "
+      if (!determinedHouse) {
+        // console.log("DEBUG: this.state.overallContext\n" + this.state.overallContext);
+        const overallContext = this.state.overallContext.substring(0, this.state.overallContext.length - 2);
+        this.getFinalHouse(overallContext, this)
+        determinedHouse = true;
+      }
       return (
         <div className="question-box">
           <h1>AI Harry Potter Quiz</h1>
-          <h1>Your house is...uh oh we don't know!! LOL</h1>
+          <h1>Your house is...{this.state.house}!!</h1>
         </div>
       );
     }
@@ -47,6 +60,13 @@ class QuestionsAnswers extends React.Component {
       </div>
     );
   }
+  getFinalHouse(overallContextFinal, obj) {
+    const body = {
+      context: overallContextFinal
+    };
+    postRequest('http://localhost:8080/get-house', obj.updateHouse,
+                 JSON.stringify(body), 0, obj.state.questionNum + 1);
+  }
   // "this" was changed to obj field to
   // fix weird bug where this was undefined
   submitAnswer(obj) {
@@ -60,13 +80,16 @@ class QuestionsAnswers extends React.Component {
       const ans4 = obj.state.answer4;
       // special text input field case
       const ans5 = document.getElementById('ans5').value;
+      const overallContext = obj.state.overallContext;
+      // console.log("DEBUG: overallContext");
+      // console.log(overallContext);
       obj.updateState(
         "Loading next question...\n...\n...\n...\n...\n",
         0,
         obj.state.questionNum
       );
       let chosenAnswer = '';
-      console.log(obj.state.chosen);
+      // console.log("Chosen Answer" + obj.state.chosen);
       if (obj.state.chosen === 1) {
         chosenAnswer = ans1;
       } else if (obj.state.chosen === 2) {
@@ -82,6 +105,9 @@ class QuestionsAnswers extends React.Component {
         question: obj.state.question,
         context: chosenAnswer
       };
+
+      // add to overall context to help pick house at the end
+      obj.updateContext(overallContext + chosenAnswer + ", "); 
       postRequest('http://localhost:8080/qs-as', obj.updateState,
                    JSON.stringify(body), 0, obj.state.questionNum + 1);
     }
@@ -91,6 +117,17 @@ class QuestionsAnswers extends React.Component {
   }
   selectAnswer(ansNum) {
     this.updateState(undefined, ansNum, undefined);
+  }
+  updateContext(newContext) {
+    this.setState({
+      overallContext : newContext
+    })
+  }
+  updateHouse(houseFinal, unusedA, unusedB) {  // unusedA and unsued B are to accomodate for the callback
+                                               // in utils.js throwing 3 params
+    this.setState({
+      house : houseFinal
+    })
   }
   updateState(stringNewQsAs, ansNum, newQuestionNum) {
     if (stringNewQsAs) {

@@ -1,6 +1,6 @@
 import socket
 # import time
-from questions_answers import get_question_and_answers
+from questions_answers import get_question_and_answers, get_answer
 import json
 
 # Define the initial generating question and context
@@ -11,13 +11,15 @@ GEN_CONTEXT = "You are making a quiz to sort people into Harry Potter houses."
 SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 8080
 
-# helper for string formatting
+# helper for string formatting or question-making
 def get_nice_qs_as(prev_question: str, context: str = None) -> str:
     question, answers = get_question_and_answers(prev_question, context)
     content = question + "\n"
     for answer in answers:
         content += answer + "\n"
     return content
+def get_house(context: str) -> str:
+    return get_answer(context + ". Which of the 4 houses do they belong in: Gryffindor, Hufflepuff, Ravenclaw, or Slytherin?")
 
 # ---------- CREATE SOCKET ----------
 
@@ -63,15 +65,17 @@ while True: # so that we continuously keep listening to new client connections
         if path == '/qs-as':
             content = get_nice_qs_as(GEN_QUESTION, GEN_CONTEXT)
     elif http_method == 'POST':
+        body_json = request.split("\r\n\r\n")[1]
+        # content = "DEBUG: THE DATA WAS RECEIVED:\n" + body_json
+        json_obj = json.loads(body_json)
         if path == '/qs-as':
-            body_json = request.split("\r\n\r\n")[1]
-            # content = "DEBUG: THE DATA WAS RECEIVED:\n" + body_json
-
-            json_obj = json.loads(body_json)
-
             # print("question: " + json_obj["question"])
             # print("context: " + json_obj["context"])
             content = get_nice_qs_as(json_obj["question"], json_obj["context"])
+        elif path == '/get-house':
+            print("HOUSE CONTEXT: " + json_obj["context"])
+            print("JSON CONTEXT: " + str(json_obj))
+            content = get_house(json_obj["context"])
 
 
     response =  'HTTP/1.1 200 OK\r\n'

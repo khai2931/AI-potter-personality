@@ -3,21 +3,34 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 # if set true, uses an offline model downloaded in ../models/
 # otherwise, downloads the model from huggingface
-USE_OFFLINE = False
+USE_OFFLINE = True
+IS_T5 = True
+SAVE_MODEL = False
 
 # if using offline, download the model first into the directory MODEL_PATH
 # MUST RUN FROM the backend directory (not root)
 # (e.g. into "models/google/flan-t5-small" for "google/flan-t5-small")
 
 MODEL_NAME = "google/flan-t5-small"
+# MODEL_NAME = "Babelscape/rebel-large"
 MODEL_PATH = "../models/" + MODEL_NAME
 
+
 if USE_OFFLINE:
-  tokenizer = T5Tokenizer.from_pretrained(MODEL_PATH)
-  model = T5ForConditionalGeneration.from_pretrained(MODEL_PATH)
+  model = MODEL_PATH
 else:
-  tokenizer = T5Tokenizer.from_pretrained(MODEL_NAME)
-  model = T5ForConditionalGeneration.from_pretrained(MODEL_NAME)
+  model = MODEL_NAME
+
+if IS_T5:
+  tokenizer = T5Tokenizer.from_pretrained(model)
+  model = T5ForConditionalGeneration.from_pretrained(model)
+else:
+  tokenizer = AutoTokenizer.from_pretrained(model)
+  model = AutoModelForSeq2SeqLM.from_pretrained(model) 
+
+if SAVE_MODEL:
+  tokenizer.save_pretrained(MODEL_PATH)
+  model.save_pretrained(MODEL_PATH)
 
 
 def get_llm_response(input_text: str) -> str:
