@@ -3,6 +3,10 @@ import socket
 from questions_answers import get_question_and_answers
 import json
 
+# Define the initial generating question and context
+GEN_QUESTION = None
+GEN_CONTEXT = "You are making a quiz to sort people into Harry Potter houses."
+
 # Define the host and port
 SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 8080
@@ -43,8 +47,8 @@ while True: # so that we continuously keep listening to new client connections
     # an optional message body.
 
     # Returns HTTP response
-    print("DEBUG: request")
-    print(request)
+    # print("DEBUG: request")
+    # print(request)
     headers = request.split('\n')
     first_header_components = headers[0].split()
 
@@ -57,7 +61,7 @@ while True: # so that we continuously keep listening to new client connections
 
     if http_method == 'GET':
         if path == '/qs-as':
-            content = get_nice_qs_as("What do you like to do in your free time?")
+            content = get_nice_qs_as(GEN_QUESTION, GEN_CONTEXT)
     elif http_method == 'POST':
         if path == '/qs-as':
             body_json = request.split("\r\n\r\n")[1]
@@ -72,13 +76,13 @@ while True: # so that we continuously keep listening to new client connections
 
     response =  'HTTP/1.1 200 OK\r\n'
     response += 'Access-Control-Allow-Origin: http://localhost:3000\r\n'
-    # response += 'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept\n'
+    response += 'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept\r\n'
 
     response += '\r\n' + content
 
     # DEBUG
-    print("DEBUG: response")
-    print(response)
+    # print("DEBUG: response")
+    # print(response)
 
     client_socket.sendall(response.encode()) # encode converts string to bytes
 
