@@ -19,7 +19,7 @@ def get_nice_qs_as(prev_question: str, context: str = None) -> str:
         content += answer + "\n"
     return content
 def get_house(context: str) -> str:
-    return get_answer(context + ". Which of the 4 houses do they belong in: Gryffindor, Hufflepuff, Ravenclaw, or Slytherin?")
+    return get_answer("A person says that they " + context + ". Which of the 4 houses does this person belong in: Gryffindor, Hufflepuff, Ravenclaw, or Slytherin?")
 
 # ---------- CREATE SOCKET ----------
 
