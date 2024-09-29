@@ -38,7 +38,8 @@ class QuestionsAnswers extends React.Component {
       return (
         <div className="question-box">
           <h1>AI Harry Potter Quiz</h1>
-          <h1>Your house is...{this.state.house}!!</h1>
+          <h1>Your house is...</h1>
+          <p>{this.state.house}</p>
         </div>
       );
     }

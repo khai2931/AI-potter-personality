@@ -99,8 +99,8 @@ def get_next_q() -> str:
 #     for answer in answers:
 #         content += answer + "\n"
 #     return content
-# def get_house(context: str) -> str:
-#     return get_answer("A person says that they " + context + ". Which of the 4 houses does this person belong in: Gryffindor, Hufflepuff, Ravenclaw, or Slytherin?")
+def get_house(context: str) -> str:
+    return get_openai_response("Which of the 4 Harry Potter houses do I belong in: Gryffindor, Hufflepuff, Ravenclaw, or Slytherin? For context, I said that I \"" + context + "\"")
 
 # ---------- CREATE SOCKET ----------
 
@@ -149,8 +149,11 @@ while True: # so that we continuously keep listening to new client connections
         if path == '/get-openai':
             print("OPENAI QUERY: " + json_obj["query"])
             content = get_openai_response(json_obj["query"])
-    elif http_method == 'GET':
-        if path == '/get-q':
+        elif path == '/get-house':
+            print("HOUSE CONTEXT: " + json_obj["context"])
+            print("JSON CONTEXT: " + str(json_obj))
+            content = get_house(json_obj["context"])
+        elif path == '/qs-as':
             content = get_next_q()
 
     # if http_method == 'GET':
