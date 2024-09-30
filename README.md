@@ -10,7 +10,7 @@ Credits to Charles Niu for the idea!
 - React
 - Python 3.12
 - OpenAI API key for gpt 4o mini (keep that in your environment variable)
-- OpenAI library installed in python
+- OpenAI library installed in python  `pip install openai`
 
 ### Backend Setup
 1. Make `backend` your current directory
