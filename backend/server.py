@@ -102,6 +102,12 @@ def get_next_q() -> str:
 def get_house(context: str) -> str:
     return get_openai_response("Which of the 4 Harry Potter houses do I belong in: Gryffindor, Hufflepuff, Ravenclaw, or Slytherin? For context, I said that I \"" + context + "\"")
 
+# helper to get sorting house dialogue
+def get_sorting_hat(context: str) -> str:
+    # the string used to make sorting hat dialogue
+    DIA_GENERATOR = "Imagine you are the Sorting Hat in Harry Potter. Write a brief, one-sentence response of max 30 words to someone who said: "
+    return get_openai_response(DIA_GENERATOR + "\"" + context + "\"")
+
 # ---------- CREATE SOCKET ----------
 
 # socket.socket() -> initializes a new socket.
@@ -155,6 +161,9 @@ while True: # so that we continuously keep listening to new client connections
             content = get_house(json_obj["context"])
         elif path == '/qs-as':
             content = get_next_q()
+        elif path == '/get-sorting-hat':
+            print("HAT CONTEXT: " + json_obj["context"])
+            content = get_sorting_hat(json_obj["context"])
 
     # if http_method == 'GET':
     #     if path == '/qs-as':

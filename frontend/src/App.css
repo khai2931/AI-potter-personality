@@ -82,6 +82,45 @@ html {
   text-align: center;
 }
 
+#sort-convo {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+#sorting-hat {
+  flex-basis: 50%;
+  width: 10%;
+  background-color: transparent;
+  align-self: center;
+}
+
+#text-bubble {
+  background-image: url("img/text_bubble.png");
+  background-size: 100%;
+  background-repeat: no-repeat;
+  flex-basis: 50%;
+  width: 100%;
+
+  text-align: center;
+  transform: translate(-25%, 0%) scale(100%);
+
+  /* transform: translate(-15%, -15%) scale(5%); */
+  /* transform-origin: bottom left; */
+  /* transition: 0.1s; */
+}
+
+#text-bubble > p {
+  font-size: small;
+  padding: 15%;
+  padding-top: 12%;
+  margin-left: 5%;
+}
+
+/* #text-bubble:hover {
+  transform: translate(-25%, 0%) scale(100%);
+} */
+
 @media(max-width: 1000px){
   .question-box{
     width: 60%;

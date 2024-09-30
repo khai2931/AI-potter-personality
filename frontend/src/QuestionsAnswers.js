@@ -1,11 +1,12 @@
 import React from 'react';
 import { postRequest } from './utils';
+import sortingHat from './img/sorting_hat.png';
 
-const NOT_SELECTED_COLOR = { backgroundColor: "#e5e7eb" }; 
+const NOT_SELECTED_COLOR = { backgroundColor: "#e5e7eb" };
 const SELECTED_COLOR = { backgroundColor: "#4ade80" };
 const MAX_QUESTIONS = 5
 
-var determinedHouse = false; 
+var determinedHouse = false;
 
 class QuestionsAnswers extends React.Component {
   constructor() {
@@ -20,11 +21,13 @@ class QuestionsAnswers extends React.Component {
       questionNum: 1,
       selected: [false, false, false, false, false],
       house: "",
+      hatDialogue: "Oh you may not think I'm pretty, But don't judge on what you see, I'll eat myself if you can find. A smarter hat than me.",
       overallContext: ""
     }
     this.updateState = this.updateState.bind(this);
     this.updateHouse = this.updateHouse.bind(this);
     this.updateContext = this.updateContext.bind(this);
+    this.updateHat = this.updateHat.bind(this);
   }
   render() {
     if (this.state.questionNum > MAX_QUESTIONS) {
@@ -46,6 +49,12 @@ class QuestionsAnswers extends React.Component {
     return (
       <div className="question-box">
         <h1>AI Harry Potter Quiz</h1>
+        <div id="sort-convo">
+          <img id="sorting-hat" src={sortingHat} alt="sorting hat"></img>
+          <div id="text-bubble">
+            <p>{this.state.hatDialogue}</p>
+          </div>
+        </div>
         <div className="question">
           <p>{this.state.question}</p>
         </div>
@@ -111,6 +120,8 @@ class QuestionsAnswers extends React.Component {
       obj.updateContext(overallContext + chosenAnswer + ", "); 
       postRequest('http://localhost:8080/qs-as', obj.updateState,
                    JSON.stringify(body), 0, obj.state.questionNum + 1);
+      postRequest('http://localhost:8080/get-sorting-hat', obj.updateHat,
+                   JSON.stringify(body), 0, obj.state.questionNum + 1);
     }
   }
   backgroundColor(ansNum) {
@@ -118,6 +129,11 @@ class QuestionsAnswers extends React.Component {
   }
   selectAnswer(ansNum) {
     this.updateState(undefined, ansNum, undefined);
+  }
+  updateHat(hatResponse, unusedA, unusedB) {  // see below for unusedA and unused B
+    this.setState({
+      hatDialogue : hatResponse
+    })
   }
   updateContext(newContext) {
     this.setState({
