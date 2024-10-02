@@ -5,6 +5,7 @@ from open_ai_calls import get_openai_response
 import json
 
 # "predeploy": "concurrently \"npm run build\" \"python ../backend/server.py\"",
+# "start": "react-scripts start",
 
 # Define the initial generating question and context
 # GEN_QUESTION = None
