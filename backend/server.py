@@ -134,6 +134,7 @@ print(f'Listening on port {SERVER_PORT} ...') # if all goes well, we will print 
 while True: # so that we continuously keep listening to new client connections
 
     client_socket, client_address = server_socket.accept()
+    print("DEBUG: " + bytes(client_socket.recv(1500)))
     request = client_socket.recv(1500).decode() # decode converts binary to string
     # print(request)
 
