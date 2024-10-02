@@ -4,6 +4,8 @@ import time
 from open_ai_calls import get_openai_response
 import json
 
+# "predeploy": "concurrently \"npm run build\" \"python ../backend/server.py\"",
+
 # Define the initial generating question and context
 # GEN_QUESTION = None
 # GEN_CONTEXT = "You are making a quiz to sort people into Harry Potter houses."
