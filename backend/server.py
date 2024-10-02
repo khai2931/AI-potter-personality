@@ -6,6 +6,7 @@ import json
 
 # "predeploy": "concurrently \"npm run build\" \"python ../backend/server.py\"",
 # "start": "react-scripts start",
+# "start": "concurrently \"react-scripts start\" \"python ../backend/server.py\"",
 
 # Define the initial generating question and context
 # GEN_QUESTION = None
