@@ -5,6 +5,8 @@ import sortingHat from './img/sorting_hat.png';
 const NOT_SELECTED_COLOR = { backgroundColor: "#e5e7eb" };
 const SELECTED_COLOR = { backgroundColor: "#4ade80" };
 const MAX_QUESTIONS = 10
+const SERVER = "https://34.207.70.186:8080/";
+// const SERVER = "http://localhost:8080/";
 
 var determinedHouse = false;
 
@@ -74,7 +76,7 @@ class QuestionsAnswers extends React.Component {
     const body = {
       context: overallContextFinal
     };
-    postRequest('http://localhost:8080/get-house', obj.updateHouse,
+    postRequest(SERVER + 'get-house', obj.updateHouse,
                  JSON.stringify(body), 0, obj.state.questionNum + 1);
   }
   // "this" was changed to obj field to
@@ -118,9 +120,9 @@ class QuestionsAnswers extends React.Component {
 
       // add to overall context to help pick house at the end
       obj.updateContext(overallContext + chosenAnswer + ", "); 
-      postRequest('http://localhost:8080/qs-as', obj.updateState,
+      postRequest(SERVER + 'qs-as', obj.updateState,
                    JSON.stringify(body), 0, obj.state.questionNum + 1);
-      postRequest('http://localhost:8080/get-sorting-hat', obj.updateHat,
+      postRequest(SERVER + 'get-sorting-hat', obj.updateHat,
                    JSON.stringify(body), 0, obj.state.questionNum + 1);
     }
   }
