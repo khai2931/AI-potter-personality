@@ -5,7 +5,7 @@ import sortingHat from './img/sorting_hat.png';
 const NOT_SELECTED_COLOR = { backgroundColor: "#e5e7eb" };
 const SELECTED_COLOR = { backgroundColor: "#4ade80" };
 const MAX_QUESTIONS = 10
-const SERVER = "https://34.207.70.186:8080/";
+const SERVER = "http://34.207.70.186:8080/";
 // const SERVER = "http://localhost:8080/";
 
 var determinedHouse = false;
