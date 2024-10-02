@@ -12,7 +12,12 @@ import json
 SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 8080
 
+# prompt ideas
+# spicy love triangle 
+# let user decide what kind of Q's
+
 # the string used to generate questions
+# Q_GENERATOR = "Create some spicy multiple-choice questions about love triangles to help the Sorting Hat sort someone in one of the four houses in Harry Potter. Format the questions in JSON with the keys \"question\", \"answer1\", \"answer2\", \"answer3\", and \"answer4\""
 Q_GENERATOR = "Create some dark, twisted, psychological multiple-choice questions to help the Sorting Hat sort someone in one of the four houses in Harry Potter. Format the questions in JSON with the keys \"question\", \"answer1\", \"answer2\", \"answer3\", and \"answer4\""
 
 # let questions be an array of arrays, such that each array is
