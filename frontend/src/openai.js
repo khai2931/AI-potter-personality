@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-const openai = new OpenAI();
+const openai = new OpenAI( {apiKey: `${process.env.REACT_APP_OPENAI_API_KEY}`, dangerouslyAllowBrowser: true} );
 
 export async function openAIRequest(url, callback, body, ansNum, newQuestionNum) {
   let params = JSON.parse(body);
@@ -15,7 +15,7 @@ export async function openAIRequest(url, callback, body, ansNum, newQuestionNum)
     }
     query = "Create exactly 10 " + params.adj + "multiple-choice questions " + params.about + "to help the Sorting Hat sort someone in one of the four houses in Harry Potter. Format the questions in JSON with the keys \"question\", \"answer1\", \"answer2\", \"answer3\", and \"answer4\". Make sure each question is unique.";
   } else if (url.endsWith('get-sorting-hat')) {
-    query = "Imagine you are the Sorting Hat in Harry Potter. Write a brief, one-sentence response of max 30 words to someone who said: " + "\"" + params.context + "\"";
+    query = "Imagine you are the Sorting Hat in Harry Potter. Write a brief, one-sentence response of max 30 words to someone who said: \"" + params.context + "\"";
   } else {
     alert("Invalid OpenAI Request");
     return null;
