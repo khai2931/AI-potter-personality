@@ -5,8 +5,8 @@ import sortingHat from './img/sorting_hat.png';
 const NOT_SELECTED_COLOR = { backgroundColor: "#e5e7eb" };
 const SELECTED_COLOR = { backgroundColor: "#4ade80" };
 const MAX_QUESTIONS = 10
-const SERVER = "http://54.196.87.156:8080/";
-// const SERVER = "http://localhost:8080/";
+// const SERVER = "http://54.196.87.156:8080/";
+const SERVER = "http://localhost:8080/";
 
 var determinedHouse = false;
 
@@ -14,25 +14,59 @@ class QuestionsAnswers extends React.Component {
   constructor() {
     super();
     this.state = {
-      question: "It's your first day at Hogwarts, what is the first thing that you do?",
-      answer1: "Check out the awesome library",
-      answer2: "Find new friends you can count on",
-      answer3: "Look for peace and quiet",
-      answer4: "Gossip and find all the secrets about everyone",
+      question: "The Sorting Hat is thinking about what questions to ask you...",
+      answer1: "...",
+      answer2: "...",
+      answer3: "...",
+      answer4: "...",
       chosen: 0,
-      questionNum: 1,
+      questionNum: 0,  // question 0 is choosing the type of question; the rest are the quiz q's
       selected: [false, false, false, false, false],
       house: "",
       hatDialogue: "Oh you may not think I'm pretty, But don't judge on what you see, I'll eat myself if you can find. A smarter hat than me.",
-      overallContext: ""
+      overallContext: "",
+      adj: "",
+      about: "",
+      questionJSON: ""
     }
     this.updateState = this.updateState.bind(this);
     this.updateHouse = this.updateHouse.bind(this);
     this.updateContext = this.updateContext.bind(this);
     this.updateHat = this.updateHat.bind(this);
+    this.updateQuestions = this.updateQuestions.bind(this);
+    this.advanceQuestion = this.advanceQuestion.bind(this);
   }
   render() {
-    if (this.state.questionNum > MAX_QUESTIONS) {
+    if (this.state.questionNum === 0) {
+      return (
+        <div className="question-box">
+          <h1>AI Harry Potter Quiz</h1>
+          <div id="sort-convo">
+            <img id="sorting-hat" src={sortingHat} alt="sorting hat"></img>
+            <div id="text-bubble">
+              <p>{this.state.hatDialogue}</p>
+            </div>
+          </div>
+          I want some
+          <input id="adj" className="starter" type="text" list="adj-data" placeholder="(type in adjectives)"/>
+          <datalist id="adj-data">
+            <option value="dark, twisted, psychological"></option>
+            <option value="lighthearted, funny"></option>
+            <option value="passionate, dramatic"></option>
+          </datalist>
+          questions about
+          <input id="topic" className="starter" type="text" list="topics-data" placeholder="(type in topic)"/>
+          <datalist id="topics-data">
+            <option value="Harry Potter"></option>
+            <option value="going to the beach"></option>
+            <option value="love triangles"></option>
+            <option value="crytocurrencies"></option>
+            <option value="random, obscure topics"></option>
+          </datalist><br></br><br></br>
+          <button onClick={() => this.updateQuestionType(this)}>Next</button>
+        </div>
+      );
+    } else if (this.state.questionNum > MAX_QUESTIONS) {
       // trim off trailing ", "
       if (!determinedHouse) {
         // console.log("DEBUG: this.state.overallContext\n" + this.state.overallContext);
@@ -112,16 +146,23 @@ class QuestionsAnswers extends React.Component {
         chosenAnswer = ans4;
       } else {
         chosenAnswer = ans5;
-      } 
+      }
       const body = {
         question: obj.state.question,
-        context: chosenAnswer
+        context: chosenAnswer,
+        adj: obj.state.adj,
+        about: obj.state.about
       };
 
       // add to overall context to help pick house at the end
-      obj.updateContext(overallContext + chosenAnswer + ", "); 
-      postRequest(SERVER + 'qs-as', obj.updateState,
-                   JSON.stringify(body), 0, obj.state.questionNum + 1);
+      obj.updateContext(overallContext + chosenAnswer + ", ");
+      if (obj.state.questionNum < MAX_QUESTIONS) {
+        obj.advanceQuestion(obj.state.questionNum + 1);
+      } else {
+        obj.updateState(undefined, undefined, MAX_QUESTIONS + 1);
+      }
+      // postRequest(SERVER + 'qs-as', obj.updateState,
+      //              JSON.stringify(body), 0, obj.state.questionNum + 1);
       postRequest(SERVER + 'get-sorting-hat', obj.updateHat,
                    JSON.stringify(body), 0, obj.state.questionNum + 1);
     }
@@ -131,6 +172,60 @@ class QuestionsAnswers extends React.Component {
   }
   selectAnswer(ansNum) {
     this.updateState(undefined, ansNum, undefined);
+  }
+  updateQuestionType(obj) {
+    obj.updateHat("Are you afraid of what you'll hear?\nAfraid I'll speak the name you fear?\nDon't worry, child, I know my job,\nYou'll learn to laugh, if first you sob.");
+    const adj = document.getElementById('adj').value;
+    const topic = document.getElementById('topic').value;
+    obj.setState({
+      adj : adj,
+      about : topic,
+      questionNum : 1
+    })
+    const body = {
+      adj: adj,
+      about: topic
+    };
+    postRequest(SERVER + 'all-qs', obj.updateQuestions,
+      JSON.stringify(body), 0, 1);
+  }
+  // removes house from string
+  removeHouse(str) {
+    str = str.replace("(Gryffindor)", "");
+    str = str.replace("(Hufflepuff)", "");
+    str = str.replace("(Ravenclaw)", "");
+    str = str.replace("(Slytherin)", "");
+    return str.trim();
+  }
+  // sets all questions and sets up first question
+  updateQuestions(jsonQs, unusedA, unusedB) {  // see below for unusedA and unused B
+    const questions = JSON.parse(jsonQs);
+    // clean up questions with answers that have (Gryffindor), (Hufflepuff), etc.
+    for (let i = 0; i < questions.length; i++) {
+      questions[i].answer1 = this.removeHouse(questions[i].answer1);
+      questions[i].answer2 = this.removeHouse(questions[i].answer2);
+      questions[i].answer3 = this.removeHouse(questions[i].answer3);
+      questions[i].answer4 = this.removeHouse(questions[i].answer4);
+    }
+    this.setState({
+      questionJSON : questions,
+      question : questions[0].question,
+      answer1 : questions[0].answer1,
+      answer2 : questions[0].answer2,
+      answer3 : questions[0].answer3,
+      answer4 : questions[0].answer4
+    });
+  }
+  advanceQuestion(qNum) {
+    const questions = this.state.questionJSON;
+    this.setState({
+      question : questions[qNum - 1].question,
+      answer1 : questions[qNum - 1].answer1,
+      answer2 : questions[qNum - 1].answer2,
+      answer3 : questions[qNum - 1].answer3,
+      answer4 : questions[qNum - 1].answer4,
+      questionNum : qNum
+    })
   }
   updateHat(hatResponse, unusedA, unusedB) {  // see below for unusedA and unused B
     this.setState({
@@ -149,7 +244,7 @@ class QuestionsAnswers extends React.Component {
     })
   }
   updateState(stringNewQsAs, ansNum, newQuestionNum) {
-    if (stringNewQsAs) {
+    if (stringNewQsAs != null && stringNewQsAs) {
       const newQsAs = stringNewQsAs.split('\n');
       this.setState({
         question : newQsAs[0],
@@ -159,7 +254,7 @@ class QuestionsAnswers extends React.Component {
         answer4 : newQsAs[4]
       })
     }
-    if (typeof ansNum !== 'undefined') {
+    if (ansNum != null && typeof ansNum !== 'undefined') {
       // for ansNum = 0, nothing is selected and text box is cleared
       let newSelected = [false, false, false, false, false];
       if (ansNum > 0) {

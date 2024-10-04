@@ -22,7 +22,6 @@ SERVER_PORT = 8080
 
 # the string used to generate questions
 # Q_GENERATOR = "Create some spicy multiple-choice questions about love triangles to help the Sorting Hat sort someone in one of the four houses in Harry Potter. Format the questions in JSON with the keys \"question\", \"answer1\", \"answer2\", \"answer3\", and \"answer4\""
-Q_GENERATOR = "Create some dark, twisted, psychological multiple-choice questions to help the Sorting Hat sort someone in one of the four houses in Harry Potter. Format the questions in JSON with the keys \"question\", \"answer1\", \"answer2\", \"answer3\", and \"answer4\""
 
 # let questions be an array of arrays, such that each array is
 # [question, answer1, answer2, answer3, answer4]
@@ -72,16 +71,31 @@ all_questions = []
 
 """
 
+# helper to extract full JSON of harry potter Q's
+def get_all_qs(adj: str, about: str) -> str:
+    if adj != "":
+        adj += " "
+    if about != "":
+        about = "about " + about + " "
+    raw_text = get_openai_response("Create exactly 10 " + adj + "multiple-choice questions " + about + "to help the Sorting Hat sort someone in one of the four houses in Harry Potter. Format the questions in JSON with the keys \"question\", \"answer1\", \"answer2\", \"answer3\", and \"answer4\". Make sure each question is unique.")
+    parts = raw_text.split("```")
+    json_text = (parts[1])[4:]
+    return json_text
+
 # helper to get next harry potter question
-def get_next_q() -> str:
+def get_next_q(adj: str, about: str) -> str:
     # each iteration of get_openai sends ~5 questions,
     # so we only need to call when we run out of Q's
+
+    # default adjectives:
+    #       "" (anything)
+    #       "dark, twisted, psychological"
+    #       "spicy"
+    # default about:
+    #       "" (anything)
+    #       "about love triangles"
     if not all_questions:
-        raw_text = get_openai_response(Q_GENERATOR)
-        parts = raw_text.split("```")
-        json_text = (parts[1])[4:]
-        # print("DEBUG: json_text")
-        # print(json_text)
+        json_text = get_all_qs(adj, about)
         json_arr = json.loads(json_text)
         # print("DEBUG: json_arr")
         # print(str(json_arr))
@@ -93,6 +107,7 @@ def get_next_q() -> str:
                 q_answers["answer3"],
                 q_answers["answer4"]
             ])
+    print("DEBUG: num questions: " + str(len(all_questions)))
     q_arr = all_questions.pop(0)
     ret = ""
     for elem in q_arr:
@@ -170,7 +185,17 @@ while True: # so that we continuously keep listening to new client connections
             print("JSON CONTEXT: " + str(json_obj))
             content = get_house(json_obj["context"])
         elif path == '/qs-as':
-            content = get_next_q()
+            print("ADJ CONTEXT: " + json_obj["adj"])
+            print("JSON CONTEXT: " + str(json_obj))
+            print("ABOUT CONTEXT: " + json_obj["about"])
+            print("JSON CONTEXT: " + str(json_obj))
+            content = get_next_q(json_obj["adj"], json_obj["about"])
+        elif path == '/all-qs':
+            print("ADJ CONTEXT: " + json_obj["adj"])
+            print("JSON CONTEXT: " + str(json_obj))
+            print("ABOUT CONTEXT: " + json_obj["about"])
+            print("JSON CONTEXT: " + str(json_obj))
+            content = get_all_qs(json_obj["adj"], json_obj["about"])
         elif path == '/get-sorting-hat':
             print("HAT CONTEXT: " + json_obj["context"])
             content = get_sorting_hat(json_obj["context"])
