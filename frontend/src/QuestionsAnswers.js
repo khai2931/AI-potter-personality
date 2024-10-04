@@ -64,7 +64,10 @@ class QuestionsAnswers extends React.Component {
             <option value="crytocurrencies"></option>
             <option value="random, obscure topics"></option>
           </datalist><br></br><br></br>
-          <button onClick={() => this.updateQuestionType(this)}>Next</button>
+          <button onClick={() => this.updateQuestionType(this)}>Next</button><br></br>
+          <footer>
+            <p>Made with ❤️ by <a href="https://www.linkedin.com/in/khai2931/" target="_blank" rel="noreferrer">Khai-Huy Alex Nguyen</a></p>
+          </footer>
         </div>
       );
     } else if (this.state.questionNum > MAX_QUESTIONS) {
@@ -79,7 +82,10 @@ class QuestionsAnswers extends React.Component {
         <div className="question-box">
           <h1>AI Harry Potter Quiz</h1>
           <h1>Your house is...</h1>
-          <p>{this.state.house}</p>
+          <p>{this.state.house}</p><br></br>
+          <footer>
+            <p>Made with ❤️ by <a href="https://www.linkedin.com/in/khai2931/" target="_blank" rel="noreferrer">Khai-Huy Alex Nguyen</a></p>
+          </footer>
         </div>
       );
     }
@@ -103,7 +109,7 @@ class QuestionsAnswers extends React.Component {
           <input id="ans5" style={this.backgroundColor(5)} className="answer" onClick={() => this.selectAnswer(5)} type="text" placeholder="Type your own answer..."/>
         </div>
         <button onClick={() => this.submitAnswer(this)}>Next</button>
-        <p className="q-num">Question {this.state.questionNum} of {MAX_QUESTIONS}</p>
+        <p className="q-num">Question {this.state.questionNum} of {MAX_QUESTIONS}</p><br></br>
       </div>
     );
   }

@@ -127,6 +127,12 @@ html {
   transform: translate(-25%, 0%) scale(100%);
 } */
 
+footer {
+  width: 100%;
+  align-self: center;
+  text-align: center;
+}
+
 @media(max-width: 1000px){
   .question-box{
     width: 60%;
