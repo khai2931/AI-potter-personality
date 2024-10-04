@@ -1,5 +1,5 @@
 *{
-  font-family: 'Segoe UI';
+  font-family: "Fredoka", sans-serif;
 }
 
 html {
@@ -27,6 +27,7 @@ html {
 
 .question-box h1 {
   text-align: center;
+  font-weight: 500;
 }
 
 .question {
