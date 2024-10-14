@@ -8,6 +8,7 @@ const SELECTED_COLOR = { backgroundColor: "#4ade80" };
 const MAX_QUESTIONS = 10
 // const SERVER = "http://54.156.81.41:8080/";
 const SERVER = "http://localhost:8080/";
+const TITLE = "AI quiz development tool";
 
 var determinedHouse = false;
 
@@ -28,7 +29,8 @@ class QuestionsAnswers extends React.Component {
       overallContext: "",
       adj: "",
       about: "",
-      questionJSON: ""
+      questionJSON: "",
+      eval: ""
     }
     this.updateState = this.updateState.bind(this);
     this.updateHouse = this.updateHouse.bind(this);
@@ -41,22 +43,22 @@ class QuestionsAnswers extends React.Component {
     if (this.state.questionNum === 0) {
       return (
         <div className="question-box">
-          <h1>AI Harry Potter Quiz</h1>
+          <h1>{TITLE}</h1>
           <div id="sort-convo">
             <img id="sorting-hat" src={sortingHat} alt="sorting hat"></img>
             <div id="text-bubble">
               <p>{this.state.hatDialogue}</p>
             </div>
           </div>
-          I want some
-          <input id="adj" className="starter" type="text" list="adj-data" placeholder="(type in adjectives)"/>
+          Question Generating Query:<br></br>
+          <textarea id="adj" className="starter" type="text" list="adj-data" placeholder="(type in query)"/>
           <datalist id="adj-data">
             <option value="dark, twisted, psychological"></option>
             <option value="lighthearted, funny"></option>
             <option value="passionate, dramatic"></option>
           </datalist>
-          questions about
-          <input id="topic" className="starter" type="text" list="topics-data" placeholder="(type in topic)"/>
+          Evaluation Query:<br></br>
+          <textarea id="topic" className="starter" type="text" list="topics-data" placeholder="(type in query)"/>
           <datalist id="topics-data">
             <option value="Harry Potter"></option>
             <option value="going to the beach"></option>
@@ -74,13 +76,14 @@ class QuestionsAnswers extends React.Component {
       // trim off trailing ", "
       if (!determinedHouse) {
         // console.log("DEBUG: this.state.overallContext\n" + this.state.overallContext);
-        const overallContext = this.state.overallContext.substring(0, this.state.overallContext.length - 2);
-        this.getFinalHouse(overallContext, this)
+        const overallContext = this.state.overallContext;
+        const evaluator = this.state.eval;
+        this.getFinalHouse(overallContext, evaluator, this)
         determinedHouse = true;
       }
       return (
         <div className="question-box">
-          <h1>AI Harry Potter Quiz</h1>
+          <h1>{TITLE}</h1>
           <h1>Your house is...</h1>
           <p>{this.state.house}</p><br></br>
           <footer>
@@ -91,7 +94,7 @@ class QuestionsAnswers extends React.Component {
     }
     return (
       <div className="question-box">
-        <h1>AI Harry Potter Quiz</h1>
+        <h1>{TITLE}</h1>
         <div id="sort-convo">
           <img id="sorting-hat" src={sortingHat} alt="sorting hat"></img>
           <div id="text-bubble">
@@ -113,9 +116,10 @@ class QuestionsAnswers extends React.Component {
       </div>
     );
   }
-  getFinalHouse(overallContextFinal, obj) {
+  getFinalHouse(overallContextFinal, evaluator, obj) {
     const body = {
-      context: overallContextFinal
+      context: overallContextFinal,
+      eval: evaluator
     };
     openAIRequest(SERVER + 'get-house', obj.updateHouse,
                  JSON.stringify(body), 0, obj.state.questionNum + 1);
@@ -185,6 +189,7 @@ class QuestionsAnswers extends React.Component {
     obj.setState({
       adj : adj,
       about : topic,
+      eval : topic,
       questionNum : 1
     })
     const body = {

@@ -119,6 +119,7 @@ html {
 }
 
 .starter {
+  width: 100%;
   border-width: 2px;
   padding: 10px;
   margin: 7px;

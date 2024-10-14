@@ -5,21 +5,16 @@ export async function openAIRequest(url, callback, body, ansNum, newQuestionNum)
   let params = JSON.parse(body);
   let query = "";
   if (url.endsWith('get-house')) {
-    query = "Which of the 4 Harry Potter houses do I belong in: Gryffindor, Hufflepuff, Ravenclaw, or Slytherin? For context, I said that I \"" + params.context + "\"";
+    query = params.eval + " For context, I said that I \"" + params.context + "\"";
   } else if (url.endsWith('all-qs')) {
-    if (params.adj !== "") {
-      params.adj += " ";
-    }
-    if (params.about !== "") {
-      params.about = "about " + params.about + " ";
-    }
-    query = "Create exactly 10 " + params.adj + "multiple-choice questions " + params.about + "to help the Sorting Hat sort someone in one of the four houses in Harry Potter. Format the questions in JSON with the keys \"question\", \"answer1\", \"answer2\", \"answer3\", and \"answer4\". Make sure each question is unique.";
+    query = params.adj;
   } else if (url.endsWith('get-sorting-hat')) {
     query = "Imagine you are the Sorting Hat in Harry Potter. Write a brief, one-sentence response of max 30 words to someone who said: \"" + params.context + "\"";
   } else {
     alert("Invalid OpenAI Request");
     return null;
   }
+  console.log("QUERY: " + query);
   const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
