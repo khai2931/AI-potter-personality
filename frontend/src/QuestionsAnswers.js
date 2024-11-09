@@ -82,7 +82,8 @@ class QuestionsAnswers extends React.Component {
         <div className="question-box">
           <h1>AI Harry Potter Quiz</h1>
           <h1>Your house is...</h1>
-          <p>{this.state.house}</p><br></br>
+          <p dangerouslySetInnerHTML={{__html: this.state.house}}></p><br></br>
+          <a href="/" className="btn">Take another quiz!</a>
           <footer>
             <p>Made with ❤️ by <a href="https://www.linkedin.com/in/khai2931/" target="_blank" rel="noreferrer">Khai-Huy Alex Nguyen</a></p>
           </footer>

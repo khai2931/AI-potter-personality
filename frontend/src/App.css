@@ -7,20 +7,20 @@ html {
   background-color: #f3f4f6;
 }
 
+.App {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .question-box {
   width: 40%;
   padding: 20px 30px;
   padding-bottom: 50px;
-  margin: auto;
+  margin-top: 30px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 10px;
-
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
 
   box-shadow: 0 5px 5px 0px rgba(0,0,0,0.1);
 }
@@ -63,7 +63,8 @@ html {
   font: inherit;
 }
 
-.question-box button {
+.question-box button, .btn {
+  text-decoration: none;
   padding: 10px 20px;
   border-radius: 5px;
 
@@ -75,7 +76,7 @@ html {
   transition: 0.2s;
 }
 
-.question-box button:hover {
+.question-box button:hover, .btn:hover {
   background-color: rgb(36, 141, 201);
 }
 

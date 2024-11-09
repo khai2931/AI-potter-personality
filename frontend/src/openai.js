@@ -6,6 +6,7 @@ export async function openAIRequest(url, callback, body, ansNum, newQuestionNum)
   let query = "";
   if (url.endsWith('get-house')) {
     query = "Which of the 4 Harry Potter houses do I belong in: Gryffindor, Hufflepuff, Ravenclaw, or Slytherin? For context, I said that I \"" + params.context + "\"";
+    query += ". Please format the response in valid HTML using only paragraphs, newlines, bolded text, and normal text.";
   } else if (url.endsWith('all-qs')) {
     if (params.adj !== "") {
       params.adj += " ";
@@ -38,6 +39,10 @@ export async function openAIRequest(url, callback, body, ansNum, newQuestionNum)
     const parts = response.split("```");
     const json_text = (parts[1]).substring(4);  // cuts off "json" token
     ret = json_text;
+  } else if (url.endsWith('get-house')) {
+    const parts = response.split("```");
+    const html_text = (parts[1]).substring(4);  // cuts off "html" token
+    ret = html_text;
   } else {
     ret = response;
   }
