@@ -30,7 +30,8 @@ class QuestionsAnswers extends React.Component {
       adj: "",
       about: "",
       questionJSON: "",
-      eval: ""
+      eval: "",
+      character: ""
     }
     this.updateState = this.updateState.bind(this);
     this.updateHouse = this.updateHouse.bind(this);
@@ -51,21 +52,12 @@ class QuestionsAnswers extends React.Component {
             </div>
           </div>
           Question Generating Query:<br></br>
-          <textarea id="adj" className="starter" type="text" list="adj-data" placeholder="(type in query)"/>
-          <datalist id="adj-data">
-            <option value="dark, twisted, psychological"></option>
-            <option value="lighthearted, funny"></option>
-            <option value="passionate, dramatic"></option>
-          </datalist>
-          Evaluation Query:<br></br>
-          <textarea id="topic" className="starter" type="text" list="topics-data" placeholder="(type in query)"/>
-          <datalist id="topics-data">
-            <option value="Harry Potter"></option>
-            <option value="going to the beach"></option>
-            <option value="love triangles"></option>
-            <option value="crytocurrencies"></option>
-            <option value="random, obscure topics"></option>
-          </datalist><br></br><br></br>
+          <textarea id="adj" className="starter" type="text" placeholder="(type in query)"/>
+          Evaluation Generator:<br></br>
+          <textarea id="topic" className="starter" type="text" placeholder="(type in gen)"/>
+          Character Generator:<br></br>
+          <textarea id="character" className="starter" type="text" placeholder="(type in gen)"/>
+          <br></br><br></br>
           <button onClick={() => this.updateQuestionType(this)}>Next</button><br></br>
           <footer>
             <p>Made with ❤️ by <a href="https://www.linkedin.com/in/khai2931/" target="_blank" rel="noreferrer">Khai-Huy Alex Nguyen</a></p>
@@ -160,6 +152,7 @@ class QuestionsAnswers extends React.Component {
       }
       const body = {
         question: obj.state.question,
+        character: obj.state.character,
         context: chosenAnswer,
         adj: obj.state.adj,
         about: obj.state.about
@@ -186,10 +179,12 @@ class QuestionsAnswers extends React.Component {
     obj.updateHat("Are you afraid of what you'll hear?\nAfraid I'll speak the name you fear?\nDon't worry, child, I know my job,\nYou'll learn to laugh, if first you sob.");
     const adj = document.getElementById('adj').value;
     const topic = document.getElementById('topic').value;
+    const characterBox = document.getElementById('character').value;
     obj.setState({
       adj : adj,
       about : topic,
       eval : topic,
+      character : characterBox,
       questionNum : 1
     })
     const body = {

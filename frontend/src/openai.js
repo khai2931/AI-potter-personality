@@ -9,7 +9,7 @@ export async function openAIRequest(url, callback, body, ansNum, newQuestionNum)
   } else if (url.endsWith('all-qs')) {
     query = params.adj;
   } else if (url.endsWith('get-sorting-hat')) {
-    query = "Imagine you are the Sorting Hat in Harry Potter. Write a brief, one-sentence response of max 30 words to someone who said: \"" + params.context + "\"";
+    query = params.character + " Write a brief, one-sentence response of max 30 words to someone who answered the question: \"" + params.question + "\" by saying \"" + params.context + "\"";
   } else {
     alert("Invalid OpenAI Request");
     return null;
